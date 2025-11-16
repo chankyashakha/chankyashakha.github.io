@@ -48,7 +48,7 @@ const Index = () => {
 
       {/* Quick Info Cards */}
       <section className="container mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
           <Card className="hover:shadow-saffron transition-all duration-300 hover:-translate-y-1">
             <CardContent className="p-8 text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
@@ -79,6 +79,19 @@ const Index = () => {
               <h3 className="text-2xl font-bold mb-2 text-primary">साप्ताहिक मिलन</h3>
               <p className="text-muted-foreground mb-2">रविवार & बुधवार</p>
               <p className="text-muted-foreground">विशेष कार्यक्रम</p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-saffron transition-all duration-300 hover:-translate-y-1">
+            <CardContent className="p-8 text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-accent/10 rounded-full mb-4">
+                <Users className="w-8 h-8 text-accent" />
+              </div>
+              <h3 className="text-2xl font-bold mb-2 text-accent">संपर्क सूची</h3>
+              <p className="text-muted-foreground mb-2">सभी सदस्यों की</p>
+              <Link to="/list" className="text-primary hover:underline font-semibold">
+                देखें →
+              </Link>
             </CardContent>
           </Card>
         </div>
