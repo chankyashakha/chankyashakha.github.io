@@ -1,4 +1,4 @@
-const GQL_ENDPOINT = "http://localhost:7005/v1/graphql";
+const GQL_ENDPOINT = "http://103.248.175.178:7005/v1/graphql";
 const GQL_SECRET = "jaishreeram";
 
 interface GraphQLResponse<T> {
