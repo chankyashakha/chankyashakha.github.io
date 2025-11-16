@@ -1,58 +1,40 @@
 import { useState, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
+
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTitle,
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
+  Dialog, DialogContent, DialogDescription, DialogHeader,
+  DialogTitle, DialogFooter,
 } from "@/components/ui/dialog";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 import { toast } from "sonner";
+
 import {
-  MoreHorizontal,
-  Trash2,
-  Check,
-  X,
-  Search,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
+  MoreHorizontal, Trash2, Check, X, Search,
+  ArrowUpDown, ArrowUp, ArrowDown,
 } from "lucide-react";
-import {
-  graphqlRequest,
-  QUERIES,
-  MUTATIONS,
-} from "@/lib/graphql";
+
+import { graphqlRequest, QUERIES, MUTATIONS } from "@/lib/graphql";
 import Navbar from "@/components/Navbar";
 
+/* TYPE DEFINITIONS */
 interface ContactData {
   id: number;
   address: string;
@@ -72,304 +54,185 @@ interface ContactsResponse {
   contact_data: ContactData[];
 }
 
-interface EditableRow {
-  id: number;
-  [key: string]: any;
-}
-
 export default function List() {
   const queryClient = useQueryClient();
+
   const [deleteId, setDeleteId] = useState<number | null>(null);
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [editingField, setEditingField] = useState<{
-    id: number;
-    field: string;
-  } | null>(null);
-  const [editedData, setEditedData] = useState<EditableRow | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [editingField, setEditingField] = useState<{ id: number; field: keyof ContactData } | null>(null);
+  const [editedValue, setEditedValue] = useState<any>("");
+
   const [sortField, setSortField] = useState<keyof ContactData | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
   const [updateEnabled, setUpdateEnabled] = useState(false);
   const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+  /* FETCH CONTACTS */
   const { data, isLoading, error } = useQuery({
     queryKey: ["contacts"],
     queryFn: () => graphqlRequest<ContactsResponse>(QUERIES.GET_CONTACTS),
-    staleTime: 1000 * 60 * 5,
+    staleTime: 5 * 60 * 1000,
   });
 
+  /* FILTER + SORT */
   const filteredContacts = useMemo(() => {
     if (!data?.contact_data) return [];
-    
+
     let result = data.contact_data;
-    
-    // Apply search filter
+
+    // searching
     if (searchTerm.trim()) {
-      const lowerSearchTerm = searchTerm.toLowerCase();
-      result = result.filter(
-        (contact) =>
-          String(contact.full_name || "").toLowerCase().includes(lowerSearchTerm) ||
-          String(contact.hindi_full_name || "").toLowerCase().includes(lowerSearchTerm) ||
-          String(contact.mobile || "").toLowerCase().includes(lowerSearchTerm) ||
-          String(contact.address || "").toLowerCase().includes(lowerSearchTerm) ||
-          String(contact.org || "").toLowerCase().includes(lowerSearchTerm) ||
-          String(contact.basti_code || "").toLowerCase().includes(lowerSearchTerm)
+      const s = searchTerm.toLowerCase();
+      result = result.filter((c) =>
+        [c.full_name, c.hindi_full_name, c.mobile, c.address, c.org, c.basti_code]
+          .some((v) => String(v || "").toLowerCase().includes(s))
       );
     }
-    
-    // Apply sorting
+
+    // sorting
     if (sortField) {
       result = [...result].sort((a, b) => {
-        let aVal = a[sortField];
-        let bVal = b[sortField];
-        
-        // Handle null/undefined
-        if (aVal == null) aVal = "";
-        if (bVal == null) bVal = "";
-        
-        // Convert to string for comparison
-        const aStr = String(aVal).toLowerCase();
-        const bStr = String(bVal).toLowerCase();
-        
-        // Try numeric comparison if both are numbers
-        const aNum = Number(aVal);
-        const bNum = Number(bVal);
-        
-        if (!isNaN(aNum) && !isNaN(bNum)) {
-          return sortOrder === "asc" ? aNum - bNum : bNum - aNum;
+        const aVal = a[sortField] ?? "";
+        const bVal = b[sortField] ?? "";
+
+        if (!isNaN(Number(aVal)) && !isNaN(Number(bVal))) {
+          return sortOrder === "asc"
+            ? Number(aVal) - Number(bVal)
+            : Number(bVal) - Number(aVal);
         }
-        
-        // String comparison
-        if (sortOrder === "asc") {
-          return aStr.localeCompare(bStr);
-        } else {
-          return bStr.localeCompare(aStr);
-        }
+
+        return sortOrder === "asc"
+          ? String(aVal).localeCompare(String(bVal))
+          : String(bVal).localeCompare(String(aVal));
       });
     }
-    
+
     return result;
   }, [data, searchTerm, sortField, sortOrder]);
 
+  /* UPDATE SINGLE FIELD */
+  const updateMutation = useMutation({
+    mutationFn: (variables: { id: number; data: Partial<ContactData> }) =>
+      graphqlRequest(MUTATIONS.UPDATE_CONTACT, variables),
+
+    onSuccess: (_, variables) => {
+  const { id, data: updatedField } = variables;
+
+  queryClient.setQueryData(["contacts"], (oldData: ContactsResponse | undefined) => {
+    if (!oldData) return oldData;
+
+    return {
+      contact_data: oldData.contact_data.map((c) =>
+        c.id === id ? { ...c, ...updatedField } : c
+      ),
+    };
+  });
+
+  setEditingField(null);
+  setEditedValue("");
+  toast.success("Updated successfully");
+},
+
+    onError: (err) => toast.error(err.message),
+  });
+
+  /* DELETE CONTACT */
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => graphqlRequest(MUTATIONS.DELETE_CONTACT, { id }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contacts"] });
+      toast.success("Deleted");
+      setDeleteId(null);
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  /* SORT HANDLER */
   const handleSort = (field: keyof ContactData) => {
     if (sortField === field) {
-      // Toggle sort order if clicking the same field
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
     } else {
-      // Set new sort field and reset to ascending
       setSortField(field);
       setSortOrder("asc");
     }
   };
 
-  const getSortIcon = (field: keyof ContactData) => {
+  /* SORT ICON COMPONENT */
+  const SortIcon = ({ field }: { field: keyof ContactData }) => {
     if (sortField !== field) {
-      return <ArrowUpDown className="h-4 w-4 opacity-40" />;
+      return <ArrowUpDown className="w-4 h-4 inline ml-2 opacity-40" />;
     }
-    return sortOrder === "asc" ? 
-      <ArrowUp className="h-4 w-4" /> : 
-      <ArrowDown className="h-4 w-4" />;
+    return sortOrder === "asc" ? (
+      <ArrowUp className="w-4 h-4 inline ml-2" />
+    ) : (
+      <ArrowDown className="w-4 h-4 inline ml-2" />
+    );
   };
 
-  const updateMutation = useMutation({
-    mutationFn: async (variables: {
-      id: number;
-      data: Partial<ContactData>;
-    }) => {
-      return graphqlRequest(MUTATIONS.UPDATE_CONTACT, variables);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["contacts"] });
-      setEditingField(null);
-      setEditedData(null);
-      toast.success("Contact updated successfully");
-    },
-    onError: (error) => {
-      toast.error(`Failed to update: ${error.message}`);
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
-      return graphqlRequest(MUTATIONS.DELETE_CONTACT, { id });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["contacts"] });
-      setDeleteId(null);
-      toast.success("Contact deleted successfully");
-    },
-    onError: (error) => {
-      toast.error(`Failed to delete: ${error.message}`);
-    },
-  });
-
-  const startEdit = (contact: ContactData) => {
-    setEditingField({ id: contact.id, field: "full_name" });
-    setEditedData({ ...contact });
+  /* EDIT CELL */
+  const startFieldEdit = (contact: ContactData, field: keyof ContactData) => {
+    if (!updateEnabled) return toast.error("Enable updates first");
+    setEditingField({ id: contact.id, field });
+    setEditedValue(contact[field]);
   };
 
-  const startFieldEdit = (id: number, field: string) => {
-    if (!updateEnabled) {
-      toast.error("Updates are disabled. Enable updates first.");
-      return;
-    }
-    setEditingField({ id, field });
-    const contact = data?.contact_data.find((c) => c.id === id);
-    if (contact) {
-      setEditedData({ ...contact });
-    }
-  };
-
-  const handleInputChange = (field: string, value: any) => {
-    if (editedData) {
-      setEditedData({
-        ...editedData,
-        [field]: value,
-      });
-    }
-  };
-
-  const saveFieldEdit = async () => {
-    if (!updateEnabled) {
-      toast.error("Updates are disabled. Enable updates first.");
-      cancelFieldEdit();
-      return;
-    }
-    if (!editingField || !editedData) return;
-
-    const { id, ...updateData } = editedData;
+  const saveFieldEdit = () => {
+    if (!editingField) return;
     updateMutation.mutate({
-      id,
-      data: updateData as Partial<ContactData>,
+      id: editingField.id,
+      data: { [editingField.field]: editedValue },
     });
   };
 
   const cancelFieldEdit = () => {
     setEditingField(null);
-    setEditedData(null);
+    setEditedValue("");
   };
 
-  const handleDelete = (id: number) => {
-    if (!updateEnabled) {
-      toast.error("Updates are disabled. Enable updates first.");
-      return;
-    }
-    setDeleteId(id);
-  };
+  const renderVerifiedToggle = (contact: ContactData) => {
+  return (
+    <div className="flex items-center h-10">
+      <Switch
+        checked={contact.verified}
+        disabled={!updateEnabled}
+        onCheckedChange={(value) => {
+          if (!updateEnabled) return toast.error("Enable updates first");
 
-  const confirmDelete = () => {
-    if (deleteId) {
-      deleteMutation.mutate(deleteId);
-    }
-  };
+          updateMutation.mutate({
+            id: contact.id,
+            data: { verified: value },
+          });
+        }}
+      />
+    </div>
+  );
+};
 
-  const handleToggleVerified = (contact: ContactData) => {
-    if (!updateEnabled) {
-      toast.error("Updates are disabled. Enable updates first.");
-      return;
-    }
-    const { id, ...updateData } = contact;
-    updateMutation.mutate({
-      id,
-      data: {
-        ...updateData,
-        verified: !contact.verified,
-      } as Partial<ContactData>,
-    });
-  };
-
-  const handleUpdateToggle = (checked: boolean) => {
-    if (checked) {
-      // Enable updates - ask for password
-      setPasswordDialogOpen(true);
-      setPassword("");
-      setPasswordError("");
-    } else {
-      // Disable updates
-      setUpdateEnabled(false);
-    }
-  };
-
-  const handlePasswordSubmit = () => {
-    if (password === "jaishreeram") {
-      setUpdateEnabled(true);
-      setPasswordDialogOpen(false);
-      setPassword("");
-      setPasswordError("");
-      toast.success("Update mode enabled");
-    } else {
-      setPasswordError("Incorrect password");
-      setPassword("");
-    }
-  };
-
-  const handlePasswordCancel = () => {
-    setPasswordDialogOpen(false);
-    setPassword("");
-    setPasswordError("");
-  };
-
-  if (isLoading) {
-    return (
-      <div>
-        <Navbar />
-        <div className="flex items-center justify-center min-h-screen">
-          <p className="text-lg text-gray-500">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div>
-        <Navbar />
-        <div className="flex items-center justify-center min-h-screen">
-          <p className="text-lg text-red-500">
-            Error loading contacts: {error.message}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  const contacts = filteredContacts;
 
   const renderTableCell = (contact: ContactData, field: keyof ContactData) => {
-    const isEditing =
-      editingField?.id === contact.id && editingField?.field === field;
-    const value = editedData?.[field] ?? contact[field];
+    const isEditing = editingField?.id === contact.id && editingField?.field === field;
 
     if (isEditing) {
       return (
-        <div className="flex gap-1 items-center h-10 min-h-10">
+        <div className="flex gap-1 items-center h-10">
           <Input
             autoFocus
-            value={value || ""}
-            onChange={(e) => handleInputChange(field, e.target.value)}
+            value={editedValue}
+            onChange={(e) => setEditedValue(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") saveFieldEdit();
               if (e.key === "Escape") cancelFieldEdit();
             }}
-            className="h-8 text-sm flex-1 min-w-0"
+            className="h-8 text-sm flex-1"
           />
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={saveFieldEdit}
-            disabled={updateMutation.isPending}
-            className="h-8 w-8 p-0 flex-shrink-0"
-          >
-            <Check className="h-4 w-4" />
+          <Button size="sm" variant="ghost" onClick={saveFieldEdit}>
+            <Check className="w-4 h-4" />
           </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={cancelFieldEdit}
-            className="h-8 w-8 p-0 flex-shrink-0"
-          >
-            <X className="h-4 w-4" />
+          <Button size="sm" variant="ghost" onClick={cancelFieldEdit}>
+            <X className="w-4 h-4" />
           </Button>
         </div>
       );
@@ -377,260 +240,196 @@ export default function List() {
 
     return (
       <div
-        onClick={() => startFieldEdit(contact.id, field)}
-        className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 p-2 rounded transition-colors h-10 flex items-center"
-        title="Click to edit"
+        className={`p-2 h-10 flex items-center ${
+          updateEnabled ? "cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800" : ""
+        }`}
+        onClick={() => startFieldEdit(contact, field)}
       >
-        {typeof value === "string" || typeof value === "number"
-          ? String(value)
-          : "-"}
+        {String(contact[field] ?? "-")}
       </div>
     );
   };
 
+  /* LOADING & ERROR */
+  if (isLoading) return <div className="p-12 text-center">Loading...</div>;
+  if (error) return <div className="p-12 text-center text-red-600">{error.message}</div>;
+
+  /* CONTACTS */
+  const contacts = filteredContacts;
+
   return (
     <div>
       <Navbar />
+
       <div className="container mx-auto py-10 px-4">
-        <Card className="border overflow-hidden">
-          <CardHeader className="sticky top-0 z-10 bg-white dark:bg-gray-950 border-b">
+        <Card>
+          <CardHeader>
+            <CardTitle>Contact List</CardTitle>
           </CardHeader>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <CardTitle>Contact Directory</CardTitle>
-              <div className="flex items-center gap-3">
-                <span className={`text-sm font-medium ${updateEnabled ? "text-green-600" : "text-gray-600"}`}>
-                  {updateEnabled ? "✓ Updates Enabled" : "Updates Disabled"}
-                </span>
-                <Switch 
-                  checked={updateEnabled} 
-                  onCheckedChange={handleUpdateToggle}
-                />
-              </div>
-            </div>
 
-
-            <div className="mb-6 flex gap-2">
+          <CardContent>
+            {/* Search + Enable Update */}
+            <div className="flex justify-between mb-5">
               <div className="flex-1 relative">
-                <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
                 <Input
-                  placeholder="Search by name, mobile, address, organization, or basti code..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 w-full"
+                  placeholder="Search contacts…"
+                  className="pl-10"
                 />
               </div>
-              {searchTerm && (
-                <Button
-                  variant="outline"
-                  onClick={() => setSearchTerm("")}
-                  className="h-10 flex-shrink-0"
-                >
-                  Clear
-                </Button>
-              )}
+
+              <div className="ml-4 flex items-center gap-3">
+                <span className={updateEnabled ? "text-green-600" : "text-gray-600"}>
+                  {updateEnabled ? "Updates Enabled" : "Updates Disabled"}
+                </span>
+                <Switch
+                  checked={updateEnabled}
+                  onCheckedChange={(v) => {
+                    if (v) setPasswordDialogOpen(true);
+                    else setUpdateEnabled(false);
+                  }}
+                />
+              </div>
             </div>
 
-            {contacts.length > 0 && (
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Showing {contacts.length} of {data?.contact_data.length} contacts
-              </p>
-            )}
+            {/* TABLE SCROLL WRAPPER */}
+            <div className="max-h-[500px] overflow-auto border rounded-md">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead onClick={() => handleSort("verified")} className="cursor-pointer">
+                      Verified<SortIcon field="verified" />
+                    </TableHead>
 
-            <div className="border rounded-md overflow-hidden" style={{ scrollbarGutter: "stable" }}>
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="hover:bg-transparent">
-                      <TableHead className="w-[150px] h-10 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800" onClick={() => handleSort("full_name")}>
-                        <div className="flex items-center gap-2">
-                          Full Name {getSortIcon("full_name")}
-                        </div>
-                      </TableHead>
-                      <TableHead className="w-[150px] h-10 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800" onClick={() => handleSort("hindi_full_name")}>
-                        <div className="flex items-center gap-2">
-                          Hindi Name {getSortIcon("hindi_full_name")}
-                        </div>
-                      </TableHead>
-                      <TableHead className="w-[120px] h-10 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800" onClick={() => handleSort("mobile")}>
-                        <div className="flex items-center gap-2">
-                          Mobile {getSortIcon("mobile")}
-                        </div>
-                      </TableHead>
-                      <TableHead className="w-[200px] h-10 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800" onClick={() => handleSort("address")}>
-                        <div className="flex items-center gap-2">
-                          Address {getSortIcon("address")}
-                        </div>
-                      </TableHead>
-                      <TableHead className="w-[80px] h-10 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800" onClick={() => handleSort("age")}>
-                        <div className="flex items-center gap-2">
-                          Age {getSortIcon("age")}
-                        </div>
-                      </TableHead>
-                      <TableHead className="w-[100px] h-10 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800" onClick={() => handleSort("org")}>
-                        <div className="flex items-center gap-2">
-                          Organization {getSortIcon("org")}
-                        </div>
-                      </TableHead>
-                      <TableHead className="w-[100px] h-10 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800" onClick={() => handleSort("dob")}>
-                        <div className="flex items-center gap-2">
-                          DOB {getSortIcon("dob")}
-                        </div>
-                      </TableHead>
-                      <TableHead className="w-[120px] h-10 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800" onClick={() => handleSort("joining_date")}>
-                        <div className="flex items-center gap-2">
-                          Joining Date {getSortIcon("joining_date")}
-                        </div>
-                      </TableHead>
-                      <TableHead className="w-[80px] h-10 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800" onClick={() => handleSort("basti_code")}>
-                        <div className="flex items-center gap-2">
-                          Basti Code {getSortIcon("basti_code")}
-                        </div>
-                      </TableHead>
-                      <TableHead className="w-[100px] h-10">Verified</TableHead>
-                      <TableHead className="w-[100px] h-10">Actions</TableHead>
+                    <TableHead onClick={() => handleSort("full_name")} className="cursor-pointer">
+                      Full Name <SortIcon field="full_name" />
+                    </TableHead>
+
+                    <TableHead onClick={() => handleSort("hindi_full_name")} className="cursor-pointer">
+                      Hindi Name <SortIcon field="hindi_full_name" />
+                    </TableHead>
+
+                    <TableHead onClick={() => handleSort("mobile")} className="cursor-pointer">
+                      Mobile <SortIcon field="mobile" />
+                    </TableHead>
+
+                    <TableHead onClick={() => handleSort("address")} className="cursor-pointer">
+                      Address <SortIcon field="address" />
+                    </TableHead>
+
+                    <TableHead onClick={() => handleSort("age")} className="cursor-pointer">
+                      Age <SortIcon field="age" />
+                    </TableHead>
+
+                    <TableHead onClick={() => handleSort("org")} className="cursor-pointer">
+                      Org <SortIcon field="org" />
+                    </TableHead>
+
+                    <TableHead onClick={() => handleSort("dob")} className="cursor-pointer">
+                      DOB <SortIcon field="dob" />
+                    </TableHead>
+
+                    <TableHead onClick={() => handleSort("joining_date")} className="cursor-pointer">
+                      Joining <SortIcon field="joining_date" />
+                    </TableHead>
+
+                    <TableHead onClick={() => handleSort("basti_code")} className="cursor-pointer">
+                      Basti <SortIcon field="basti_code" />
+                    </TableHead>
+
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+
+                <TableBody>
+                  {contacts.map((c) => (
+                    <TableRow key={c.id}>
+                      <TableCell>{renderVerifiedToggle(c)}</TableCell>
+                      <TableCell>{renderTableCell(c, "full_name")}</TableCell>
+                      <TableCell>{renderTableCell(c, "hindi_full_name")}</TableCell>
+                      <TableCell>{renderTableCell(c, "mobile")}</TableCell>
+                      <TableCell>{renderTableCell(c, "address")}</TableCell>
+                      <TableCell>{renderTableCell(c, "age")}</TableCell>
+                      <TableCell>{renderTableCell(c, "org")}</TableCell>
+                      <TableCell>{renderTableCell(c, "dob")}</TableCell>
+                      <TableCell>{renderTableCell(c, "joining_date")}</TableCell>
+                      <TableCell>{renderTableCell(c, "basti_code")}</TableCell>
+
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                              <MoreHorizontal className="w-4 h-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <DropdownMenuItem
+                              onClick={() => setDeleteId(c.id)}
+                              className="text-red-600"
+                            >
+                              <Trash2 className="mr-2 w-4 h-4" /> Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+
                     </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {contacts.map((contact) => (
-                      <TableRow key={contact.id} className="hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors duration-150 h-10">
-                        <TableCell className="py-0">
-                          {renderTableCell(contact, "full_name")}
-                        </TableCell>
-                        <TableCell className="py-0">
-                          {renderTableCell(contact, "hindi_full_name")}
-                        </TableCell>
-                        <TableCell className="py-0">
-                          {renderTableCell(contact, "mobile")}
-                        </TableCell>
-                        <TableCell className="py-0">
-                          {renderTableCell(contact, "address")}
-                        </TableCell>
-                        <TableCell className="py-0">
-                          {renderTableCell(contact, "age")}
-                        </TableCell>
-                        <TableCell className="py-0">
-                          {renderTableCell(contact, "org")}
-                        </TableCell>
-                        <TableCell className="py-0">
-                          {renderTableCell(contact, "dob")}
-                        </TableCell>
-                        <TableCell className="py-0">
-                          {renderTableCell(contact, "joining_date")}
-                        </TableCell>
-                        <TableCell className="py-0">
-                          {renderTableCell(contact, "basti_code")}
-                        </TableCell>
-                        <TableCell className="py-0">
-                          <Button
-                            variant={contact.verified ? "default" : "outline"}
-                            size="sm"
-                            onClick={() => handleToggleVerified(contact)}
-                            disabled={updateMutation.isPending}
-                            className="h-8 text-xs"
-                          >
-                            {contact.verified ? "✓ Yes" : "○ No"}
-                          </Button>
-                        </TableCell>
-                        <TableCell className="py-0">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                className="h-8 w-8 p-0"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem
-                                onClick={() => handleDelete(contact.id)}
-                                className="text-red-600"
-                              >
-                                <Trash2 className="mr-2 h-4 w-4" />
-                                Delete
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
-
-            {contacts.length === 0 && (
-              <div className="text-center py-8">
-                <p className="text-gray-500">
-                  {searchTerm ? "No contacts match your search" : "No contacts found"}
-                </p>
-              </div>
-            )}
           </CardContent>
         </Card>
       </div>
 
-      <AlertDialog open={deleteId !== null}>
+      {/* DELETE DIALOG */}
+      <AlertDialog open={deleteId != null}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Contact</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete this contact? This action cannot
-              be undone.
-            </AlertDialogDescription>
+            <AlertDialogTitle>Delete Contact?</AlertDialogTitle>
+            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
+
           <div className="flex justify-end gap-4">
-            <AlertDialogCancel onClick={() => setDeleteId(null)}>
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDelete}
-              disabled={deleteMutation.isPending}
-              className="bg-red-600 hover:bg-red-700"
-            >
-              {deleteMutation.isPending ? "Deleting..." : "Delete"}
+            <AlertDialogCancel onClick={() => setDeleteId(null)}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={() => deleteMutation.mutate(deleteId!)}>
+              Delete
             </AlertDialogAction>
           </div>
         </AlertDialogContent>
       </AlertDialog>
 
+      {/* PASSWORD DIALOG */}
       <Dialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Enable Updates</DialogTitle>
-            <DialogDescription>
-              Enter the password to enable contact updates
-            </DialogDescription>
+            <DialogDescription>Enter password</DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <label htmlFor="password" className="text-sm font-medium">
-                Password
-              </label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handlePasswordSubmit();
-                  if (e.key === "Escape") handlePasswordCancel();
-                }}
-                className="col-span-3"
-              />
-              {passwordError && (
-                <p className="text-sm text-red-600">{passwordError}</p>
-              )}
-            </div>
-          </div>
+
+          <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+
+          {passwordError && <p className="text-red-600 text-sm">{passwordError}</p>}
+
           <DialogFooter>
-            <Button variant="outline" onClick={handlePasswordCancel}>
+            <Button variant="outline" onClick={() => setPasswordDialogOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handlePasswordSubmit}>
-              Enable Updates
+
+            <Button
+              onClick={() => {
+                if (password === "jaishreeram") {
+                  setUpdateEnabled(true);
+                  setPasswordDialogOpen(false);
+                  setPasswordError("");
+                } else {
+                  setPasswordError("Incorrect password");
+                }
+              }}
+            >
+              Enable
             </Button>
           </DialogFooter>
         </DialogContent>
