@@ -23,8 +23,17 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import {
@@ -79,6 +88,10 @@ export default function List() {
   const [editedData, setEditedData] = useState<EditableRow | null>(null);
   const [sortField, setSortField] = useState<keyof ContactData | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [updateEnabled, setUpdateEnabled] = useState(false);
+  const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["contacts"],
@@ -197,6 +210,10 @@ export default function List() {
   };
 
   const startFieldEdit = (id: number, field: string) => {
+    if (!updateEnabled) {
+      toast.error("Updates are disabled. Enable updates first.");
+      return;
+    }
     setEditingField({ id, field });
     const contact = data?.contact_data.find((c) => c.id === id);
     if (contact) {
@@ -214,6 +231,11 @@ export default function List() {
   };
 
   const saveFieldEdit = async () => {
+    if (!updateEnabled) {
+      toast.error("Updates are disabled. Enable updates first.");
+      cancelFieldEdit();
+      return;
+    }
     if (!editingField || !editedData) return;
 
     const { id, ...updateData } = editedData;
@@ -229,6 +251,10 @@ export default function List() {
   };
 
   const handleDelete = (id: number) => {
+    if (!updateEnabled) {
+      toast.error("Updates are disabled. Enable updates first.");
+      return;
+    }
     setDeleteId(id);
   };
 
@@ -239,6 +265,10 @@ export default function List() {
   };
 
   const handleToggleVerified = (contact: ContactData) => {
+    if (!updateEnabled) {
+      toast.error("Updates are disabled. Enable updates first.");
+      return;
+    }
     const { id, ...updateData } = contact;
     updateMutation.mutate({
       id,
@@ -247,6 +277,37 @@ export default function List() {
         verified: !contact.verified,
       } as Partial<ContactData>,
     });
+  };
+
+  const handleUpdateToggle = (checked: boolean) => {
+    if (checked) {
+      // Enable updates - ask for password
+      setPasswordDialogOpen(true);
+      setPassword("");
+      setPasswordError("");
+    } else {
+      // Disable updates
+      setUpdateEnabled(false);
+    }
+  };
+
+  const handlePasswordSubmit = () => {
+    if (password === "jaishreeram") {
+      setUpdateEnabled(true);
+      setPasswordDialogOpen(false);
+      setPassword("");
+      setPasswordError("");
+      toast.success("Update mode enabled");
+    } else {
+      setPasswordError("Incorrect password");
+      setPassword("");
+    }
+  };
+
+  const handlePasswordCancel = () => {
+    setPasswordDialogOpen(false);
+    setPassword("");
+    setPasswordError("");
   };
 
   if (isLoading) {
@@ -333,9 +394,22 @@ export default function List() {
       <div className="container mx-auto py-10 px-4">
         <Card className="border overflow-hidden">
           <CardHeader className="sticky top-0 z-10 bg-white dark:bg-gray-950 border-b">
-            <CardTitle>Contact Directory</CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <CardTitle>Contact Directory</CardTitle>
+              <div className="flex items-center gap-3">
+                <span className={`text-sm font-medium ${updateEnabled ? "text-green-600" : "text-gray-600"}`}>
+                  {updateEnabled ? "✓ Updates Enabled" : "Updates Disabled"}
+                </span>
+                <Switch 
+                  checked={updateEnabled} 
+                  onCheckedChange={handleUpdateToggle}
+                />
+              </div>
+            </div>
+
+
             <div className="mb-6 flex gap-2">
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
@@ -520,6 +594,47 @@ export default function List() {
           </div>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Enable Updates</DialogTitle>
+            <DialogDescription>
+              Enter the password to enable contact updates
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <label htmlFor="password" className="text-sm font-medium">
+                Password
+              </label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handlePasswordSubmit();
+                  if (e.key === "Escape") handlePasswordCancel();
+                }}
+                className="col-span-3"
+              />
+              {passwordError && (
+                <p className="text-sm text-red-600">{passwordError}</p>
+              )}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={handlePasswordCancel}>
+              Cancel
+            </Button>
+            <Button onClick={handlePasswordSubmit}>
+              Enable Updates
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
