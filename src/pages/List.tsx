@@ -176,6 +176,7 @@ export default function List() {
   const startFieldEdit = (contact: ContactData, field: keyof ContactData) => {
     if (!updateEnabled) return toast.error("Enable updates first");
     setEditingField({ id: contact.id, field });
+    console.log(contact, field);
     setEditedValue(contact[field]);
   };
 
@@ -226,7 +227,7 @@ export default function List() {
               if (e.key === "Enter") saveFieldEdit();
               if (e.key === "Escape") cancelFieldEdit();
             }}
-            className="h-8 text-sm flex-1"
+            className="h-8 text-sm flex-1 min-w-[100px]"
           />
           <Button size="sm" variant="ghost" onClick={saveFieldEdit}>
             <Check className="w-4 h-4" />
