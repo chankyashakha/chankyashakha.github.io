@@ -9,6 +9,7 @@ import Events from "./pages/Events";
 import Schedule from "./pages/Schedule";
 import List from "./pages/List";
 import NotFound from "./pages/NotFound";
+import GharSamparkTeam from "./pages/GharSamparkTeam";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/events" element={<Events />} />
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/list" element={<List />} />
+          <Route path="/gharSamparkTeam" element={<GharSamparkTeam />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

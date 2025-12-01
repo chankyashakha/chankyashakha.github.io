@@ -48,15 +48,14 @@ const Index = () => {
 
       {/* Quick Info Cards */}
       <section className="container mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           <Card className="hover:shadow-saffron transition-all duration-300 hover:-translate-y-1">
             <CardContent className="p-8 text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
                 <Clock className="w-8 h-8 text-primary" />
               </div>
               <h3 className="text-2xl font-bold mb-2 text-primary">शाखा समय</h3>
-              <p className="text-muted-foreground mb-2">प्रातः: 6:00 - 7:45</p>
-              <p className="text-muted-foreground">सायं: 5:00 - 6:30</p>
+              <p className="text-muted-foreground mb-2">प्रातः: 7:00 - 8:00</p>
             </CardContent>
           </Card>
 
@@ -68,6 +67,9 @@ const Index = () => {
               <h3 className="text-2xl font-bold mb-2 text-accent">सदस्य संख्या</h3>
               <p className="text-4xl font-bold text-primary mb-2">50+</p>
               <p className="text-muted-foreground">नियमित स्वयंसेवक</p>
+              <Link to="/list" className="text-primary hover:underline font-semibold">
+                देखें →
+              </Link>
             </CardContent>
           </Card>
 
@@ -77,12 +79,12 @@ const Index = () => {
                 <Calendar className="w-8 h-8 text-primary" />
               </div>
               <h3 className="text-2xl font-bold mb-2 text-primary">साप्ताहिक मिलन</h3>
-              <p className="text-muted-foreground mb-2">रविवार & बुधवार</p>
-              <p className="text-muted-foreground">विशेष कार्यक्रम</p>
+              <p className="text-muted-foreground mb-2">रविवार</p>
+              {/* <p className="text-muted-foreground">विशेष कार्यक्रम</p> */}
             </CardContent>
           </Card>
 
-          <Card className="hover:shadow-saffron transition-all duration-300 hover:-translate-y-1">
+          {/* <Card className="hover:shadow-saffron transition-all duration-300 hover:-translate-y-1">
             <CardContent className="p-8 text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-accent/10 rounded-full mb-4">
                 <Users className="w-8 h-8 text-accent" />
@@ -93,7 +95,7 @@ const Index = () => {
                 देखें →
               </Link>
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
       </section>
 
