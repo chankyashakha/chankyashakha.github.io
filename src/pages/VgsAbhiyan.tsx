@@ -13,12 +13,12 @@ const vgsAbhiyanData = [
       title: "बस्ती नेतृत्व: काली माता मंदिर",
       campaignHead: [
         {
-          position: "अभियान प्रमुख (बस्ती)",
+          position: "अभियान प्रमुख",
           name: "श्री रवि गाबा", 
           image: "/assets/img/dhwaj.jpeg",
         },
         {
-          position: "सह अभियान प्रमुख (बस्ती)",
+          position: "सह अभियान प्रमुख",
           name: "श्री महेश",
           image: "/assets/img/dhwaj.jpeg",
         },
@@ -171,12 +171,12 @@ const vgsAbhiyanData = [
       title: "बस्ती नेतृत्व: सावन भादो",
       campaignHead: [
         {
-          position: "अभियान प्रमुख (बस्ती)",
+          position: "अभियान प्रमुख",
           name: "सुरेंदर रविदास", 
           image: "/assets/img/dhwaj.jpeg",
         },
         {
-          position: "सह अभियान प्रमुख (बस्ती)",
+          position: "सह अभियान प्रमुख",
           name: "जगदंबा",
           image: "/assets/img/dhwaj.jpeg",
         },
@@ -209,7 +209,7 @@ const vgsAbhiyanData = [
       title: "बस्ती नेतृत्व: बाबा फरीद पुरी",
       campaignHead: [
         {
-          position: "अभियान प्रमुख (बस्ती)",
+          position: "अभियान प्रमुख",
           name: "हरफूल", 
           image: "/assets/img/dhwaj.jpeg",
         },
