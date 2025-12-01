@@ -1,5 +1,5 @@
 import Navbar from "@/components/Navbar";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users } from "lucide-react";
 
 const hierarchyData = [
@@ -43,114 +43,24 @@ const hierarchyData = [
       {
         position: "घटनायक",
         name: "सुभाष जी",
-        image:
-          "/assets/img/dhwaj.jpeg",
+        image: "/assets/img/dhwaj.jpeg",
+        swyamSewaks: [
+          { position: "स्वयं सेवक", name: "धीरज जी", image: "/assets/img/dhwaj.jpeg" },
+          { position: "स्वयं सेवक", name: "देव चन्दर जी", image: "/assets/img/dhwaj.jpeg" },
+        ]
       },
       {
         position: "घटनायक",
         name: "रवि जी",
-        image:
-          "/assets/img/dhwaj.jpeg",
+        image: "/assets/img/dhwaj.jpeg",
+        swyamSewaks: [
+          { position: "स्वयं सेवक", name: "संजय जी", image: "/assets/img/dhwaj.jpeg" },
+          { position: "स्वयं सेवक", name: "सुशील पंडित जी", image: "/assets/img/dhwaj.jpeg" },
+        ]
       },
-      {
-        position: "घटनायक",
-        name: "उमेश जी",
-        image:
-          "/assets/img/dhwaj.jpeg",
-      },
-      {
-        position: "घटनायक",
-        name: "सुरेंदर रविदास जी",
-        image:
-          "/assets/img/dhwaj.jpeg",
-      },
-      {
-        position: "घटनायक",
-        name: "जगदंबा जी",
-        image:
-          "/assets/img/dhwaj.jpeg",
-      },
-      {
-        position: "घटनायक",
-        name: "जगदंबा जी",
-        image:
-          "/assets/img/dhwaj.jpeg",
-      },
-      {
-        position: "घटनायक",
-        name: "हरफूल जी",
-        image:
-          "/assets/img/dhwaj.jpeg",
-      },
+      // More Ghat Nayaks can go here
     ],
-  },
-  {
-    level: 5,
-    title: "स्वयं सेवक",
-    members: [
-      {
-        position: "स्वयं सेवक",
-        name: "धीरज जी",
-        image:
-          "/assets/img/dhwaj.jpeg",
-      },
-      {
-        position: "स्वयं सेवक",
-        name: "देव चन्दर जी",
-        image:
-          "/assets/img/dhwaj.jpeg",
-      },
-      {
-        position: "स्वयं सेवक",
-        name: "संजय जी",
-        image:
-          "/assets/img/dhwaj.jpeg",
-      },
-      {
-        position: "स्वयं सेवक",
-        name: "सुशील पंडित जी",
-        image:
-          "/assets/img/dhwaj.jpeg",
-      },
-      {
-        position: "स्वयं सेवक",
-        name: "पंडित जनार्दन जी",
-        image:
-          "/assets/img/dhwaj.jpeg",
-      },
-      {
-        position: "स्वयं सेवक",
-        name: "दीपांशु जी",
-        image:
-          "/assets/img/dhwaj.jpeg",
-      },
-      {
-        position: "स्वयं सेवक",
-        name: "ओमकार जी",
-        image:
-          "/assets/img/dhwaj.jpeg",
-      },
-      {
-        position: "स्वयं सेवक",
-        name: "निखिल जी",
-        image:
-          "/assets/img/dhwaj.jpeg",
-      },
-      {
-        position: "स्वयं सेवक",
-        name: "अभिषेक जी",
-        image:
-          "/assets/img/dhwaj.jpeg",
-      },
-      {
-        position: "स्वयं सेवक",
-        name: "मनोज जी",
-        image:
-          "/assets/img/dhwaj.jpeg",
-      },
-      
-    ],
-  },
+  }
 ];
 
 const Hierarchy = () => {
@@ -183,10 +93,10 @@ const Hierarchy = () => {
 
               {/* Members in this level */}
               <div  className={`grid gap-8 justify-center ${
-    levelData.level <= 3
-      ? "grid-cols-1 sm:grid-cols-1"
-      : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
-  }`}>
+                levelData.level <= 3
+                  ? "grid-cols-1 sm:grid-cols-1"
+                  : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+              }`}>
                 {levelData.members.map((member, idx) => (
                   <Card
                     key={idx}
@@ -213,6 +123,32 @@ const Hierarchy = () => {
                       </div>
 
                       <div className="h-2 bg-gradient-to-r from-primary via-accent to-primary"></div>
+
+                      {/* Show Swyam Sewaks in a list under Ghat Nayak */}
+                      {member.swyamSewaks && (
+                        <div className="space-y-4 pt-6">
+                          <h3 className="text-xl font-bold text-center text-primary">स्वयं सेवक</h3>
+                          <div className="space-y-3">
+                            {member.swyamSewaks.map((swyamSewak, swyamIdx) => (
+                              <div key={swyamIdx} className="flex items-start space-x-3 border-b pb-2 last:border-b-0 last:pb-0">
+                                <img
+                                  src={swyamSewak.image}
+                                  alt={swyamSewak.name}
+                                  className="w-12 h-12 rounded-full object-cover"
+                                />
+                                <div>
+                                  <p className="text-sm font-semibold text-primary">
+                                    {swyamSewak.position}
+                                  </p>
+                                  <h4 className="text-base font-bold text-foreground">
+                                    {swyamSewak.name}
+                                  </h4>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 ))}

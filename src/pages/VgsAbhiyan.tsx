@@ -163,76 +163,76 @@ const vgsAbhiyanData = [
     ],
   },
   
-  // --- सावन भादो बस्ती ---
-  {
-    bastiName: "सावन भादो",
-    bastiEnglishName: "Sawan Bhadav",
-    leadership: {
-      title: "बस्ती नेतृत्व: सावन भादो",
-      campaignHead: [
-        {
-          position: "अभियान प्रमुख",
-          name: "सुरेंदर रविदास", 
-          image: "/assets/img/dhwaj.jpeg",
-        },
-        {
-          position: "सह अभियान प्रमुख",
-          name: "जगदंबा",
-          image: "/assets/img/dhwaj.jpeg",
-        },
-      ],
-      implementationTeam: [
-        {
-          position: "क्रियान्वयन टोली सदस्य",
-          name: "धीरज",
-          image: "/assets/img/dhwaj.jpeg",
-        },
-      ],
-    },
-    tolis: [
-      {
-        toliName: "टोली 1 (रविदास नगर)",
-        members: [
-          { position: "टोली प्रमुख", name: "देव चन्दर", image: "/assets/img/dhwaj.jpeg" },
-          { position: "सह टोली प्रमुख", name: "संजय", image: "/assets/img/dhwaj.jpeg" },
-          { position: "टोली सदस्य", name: "पंडित जनार्दन", image: "/assets/img/dhwaj.jpeg" },
-        ],
-      },
-    ],
-  },
+  // // --- सावन भादो बस्ती ---
+  // {
+  //   bastiName: "सावन भादो",
+  //   bastiEnglishName: "Sawan Bhadav",
+  //   leadership: {
+  //     title: "बस्ती नेतृत्व: सावन भादो",
+  //     campaignHead: [
+  //       {
+  //         position: "अभियान प्रमुख",
+  //         name: "सुरेंदर रविदास", 
+  //         image: "/assets/img/dhwaj.jpeg",
+  //       },
+  //       {
+  //         position: "सह अभियान प्रमुख",
+  //         name: "जगदंबा",
+  //         image: "/assets/img/dhwaj.jpeg",
+  //       },
+  //     ],
+  //     implementationTeam: [
+  //       {
+  //         position: "क्रियान्वयन टोली सदस्य",
+  //         name: "धीरज",
+  //         image: "/assets/img/dhwaj.jpeg",
+  //       },
+  //     ],
+  //   },
+  //   tolis: [
+  //     {
+  //       toliName: "टोली 1 (रविदास नगर)",
+  //       members: [
+  //         { position: "टोली प्रमुख", name: "देव चन्दर", image: "/assets/img/dhwaj.jpeg" },
+  //         { position: "सह टोली प्रमुख", name: "संजय", image: "/assets/img/dhwaj.jpeg" },
+  //         { position: "टोली सदस्य", name: "पंडित जनार्दन", image: "/assets/img/dhwaj.jpeg" },
+  //       ],
+  //     },
+  //   ],
+  // },
 
-  // --- बाबा फरीद पुरी बस्ती ---
-  {
-    bastiName: "बाबा फरीद पुरी",
-    bastiEnglishName: "Baba Farid Puri",
-    leadership: {
-      title: "बस्ती नेतृत्व: बाबा फरीद पुरी",
-      campaignHead: [
-        {
-          position: "अभियान प्रमुख",
-          name: "हरफूल", 
-          image: "/assets/img/dhwaj.jpeg",
-        },
-      ],
-      implementationTeam: [
-        {
-          position: "क्रियान्वयन टोली सदस्य",
-          name: "सुशील पंडित",
-          image: "/assets/img/dhwaj.jpeg",
-        },
-      ],
-    },
-    tolis: [
-      {
-        toliName: "टोली 1 (मुख्य मार्ग)",
-        members: [
-          { position: "टोली प्रमुख", name: "निखिल", image: "/assets/img/dhwaj.jpeg" },
-          { position: "सह टोली प्रमुख", name: "अभिषेक", image: "/assets/img/dhwaj.jpeg" },
-          { position: "टोली सदस्य", name: "मनोज", image: "/assets/img/dhwaj.jpeg" },
-        ],
-      },
-    ],
-  },
+  // // --- बाबा फरीद पुरी बस्ती ---
+  // {
+  //   bastiName: "बाबा फरीद पुरी",
+  //   bastiEnglishName: "Baba Farid Puri",
+  //   leadership: {
+  //     title: "बस्ती नेतृत्व: बाबा फरीद पुरी",
+  //     campaignHead: [
+  //       {
+  //         position: "अभियान प्रमुख",
+  //         name: "हरफूल", 
+  //         image: "/assets/img/dhwaj.jpeg",
+  //       },
+  //     ],
+  //     implementationTeam: [
+  //       {
+  //         position: "क्रियान्वयन टोली सदस्य",
+  //         name: "सुशील पंडित",
+  //         image: "/assets/img/dhwaj.jpeg",
+  //       },
+  //     ],
+  //   },
+  //   tolis: [
+  //     {
+  //       toliName: "टोली 1 (मुख्य मार्ग)",
+  //       members: [
+  //         { position: "टोली प्रमुख", name: "निखिल", image: "/assets/img/dhwaj.jpeg" },
+  //         { position: "सह टोली प्रमुख", name: "अभिषेक", image: "/assets/img/dhwaj.jpeg" },
+  //         { position: "टोली सदस्य", name: "मनोज", image: "/assets/img/dhwaj.jpeg" },
+  //       ],
+  //     },
+  //   ],
+  // },
 ];
 
 // --- सहायक कंपोनेंट: सदस्य कार्ड (Member Card Component) ---
