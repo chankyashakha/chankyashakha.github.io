@@ -9,6 +9,7 @@ const Navbar = () => {
 
   const navLinks = [
     { path: "/", label: "मुख्य पृष्ठ" },
+    { path: "/VgsAbhiyan", label: "व्यापक गृह संपर्क अभियान" },
     { path: "/hierarchy", label: "संगठन" },
     { path: "/events", label: "कार्यक्रम" },
     { path: "/schedule", label: "दैनिक कार्यसूची" },

@@ -10,6 +10,7 @@ import Schedule from "./pages/Schedule";
 import List from "./pages/List";
 import NotFound from "./pages/NotFound";
 import GharSamparkTeam from "./pages/GharSamparkTeam";
+import VgsAbhiyan from "./pages/VgsAbhiyan";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/hierarchy" element={<Hierarchy />} />
+          <Route path="/vgsAbhiyan" element={<VgsAbhiyan />} />
           <Route path="/events" element={<Events />} />
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/list" element={<List />} />
