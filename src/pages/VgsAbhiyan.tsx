@@ -19,7 +19,7 @@ const vgsAbhiyanData = [
         },
         {
           position: "सह अभियान प्रमुख",
-          name: "श्री महेश",
+          name: "रवि चन्दर झा",
           image: "/assets/img/dhwaj.jpeg",
         },
       ],
@@ -117,7 +117,7 @@ const vgsAbhiyanData = [
   },
   {
     "position": "टोली सदस्य",
-    "name": "रवि चन्दर झा",
+    "name": "श्री महेश",
     "image": "/assets/img/dhwaj.jpeg"
   },
   {
