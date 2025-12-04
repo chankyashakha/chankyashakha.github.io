@@ -300,9 +300,9 @@ export default function List() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead onClick={() => handleSort("verified")} className="cursor-pointer">
+                    {/* <TableHead onClick={() => handleSort("verified")} className="cursor-pointer">
                       Verified<SortIcon field="verified" />
-                    </TableHead>
+                    </TableHead> */}
 
                     <TableHead onClick={() => handleSort("full_name")} className="cursor-pointer">
                       Full Name <SortIcon field="full_name" />
@@ -347,7 +347,7 @@ export default function List() {
                 <TableBody>
                   {contacts.map((c) => (
                     <TableRow key={c.id}>
-                      <TableCell>{renderVerifiedToggle(c)}</TableCell>
+                      {/* <TableCell>{renderVerifiedToggle(c)}</TableCell> */}
                       <TableCell>{renderTableCell(c, "full_name")}</TableCell>
                       <TableCell>{renderTableCell(c, "hindi_full_name")}</TableCell>
                       <TableCell>{renderTableCell(c, "mobile")}</TableCell>
