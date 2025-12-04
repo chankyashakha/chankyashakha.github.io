@@ -312,12 +312,9 @@ export default function List() {
                       Hindi Name <SortIcon field="hindi_full_name" />
                     </TableHead>
 
-                  {/* Conditionally render the Mobile column header */}
-                        {updateEnabled && (
-                          <TableHead onClick={() => handleSort("mobile")} className="cursor-pointer">
-                            Mobile <SortIcon field="mobile" />
-                          </TableHead>
-                        )}
+                    <TableHead onClick={() => handleSort("mobile")} className="cursor-pointer">
+                      Mobile <SortIcon field="mobile" />
+                    </TableHead>
 
                     <TableHead onClick={() => handleSort("address")} className="cursor-pointer">
                       Address <SortIcon field="address" />
@@ -353,10 +350,7 @@ export default function List() {
                       <TableCell>{renderVerifiedToggle(c)}</TableCell>
                       <TableCell>{renderTableCell(c, "full_name")}</TableCell>
                       <TableCell>{renderTableCell(c, "hindi_full_name")}</TableCell>
-                       {/* Conditionally render the Mobile cell */}
-                        {updateEnabled && (
-                          <TableCell>{renderTableCell(c, "mobile")}</TableCell>
-                        )}
+                      <TableCell>{renderTableCell(c, "mobile")}</TableCell>
                       <TableCell>{renderTableCell(c, "address")}</TableCell>
                       <TableCell>{renderTableCell(c, "age")}</TableCell>
                       <TableCell>{renderTableCell(c, "org")}</TableCell>
