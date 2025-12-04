@@ -32,135 +32,83 @@ const vgsAbhiyanData = [
       ],
     },
     tolis: [
-      {
-        toliName: "टोली 1",
-        members: [
-  {
-    "position": "महिला शक्ति टोली सदस्य",
-    "name": "अनुराधा",
-    "image": "/assets/img/dhwaj.jpeg"
+        {
+    toliName: "8 Block",
+    members: [
+      { position: "टोली प्रमुख", name: "डॉ मेहता", image: "/assets/img/dhwaj.jpeg" },
+      { position: "सह टोली प्रमुख", name: "मणि अनेजा", image: "/assets/img/dhwaj.jpeg" },
+      { position: "टोली सदस्य", name: "लीना आनंद सूरी", image: "/assets/img/dhwaj.jpeg" },
+      { position: "टोली सदस्य", name: "सुनील मल्होत्रा", image: "/assets/img/dhwaj.jpeg" },
+      { position: "टोली सदस्य", name: "एन के मेहता", image: "/assets/img/dhwaj.jpeg" }
+    ]
   },
   {
-    "position": "महिला शक्ति टोली सदस्य",
-    "name": "आशा",
-    "image": "/assets/img/dhwaj.jpeg"
+    toliName: "12 Block",
+    members: [
+      { position: "टोली प्रमुख", name: "राहुल सचदेवा", image: "/assets/img/dhwaj.jpeg" },
+      { position: "सह टोली प्रमुख", name: "नीरज मग्गो", image: "/assets/img/dhwaj.jpeg" },
+      { position: "टोली सदस्य", name: "दीपक आनंद", image: "/assets/img/dhwaj.jpeg" }
+    ]
   },
+
   {
-    "position": "महिला शक्ति टोली सदस्य",
-    "name": "लीना आनंद सूरी",
-    "image": "/assets/img/dhwaj.jpeg"
+    toliName: "18 Block",
+    members: [
+      { position: "टोली प्रमुख", name: "सुरेश आनंद", image: "/assets/img/dhwaj.jpeg" },
+      { position: "सह टोली प्रमुख", name: "जगदंबा प्रसाद", image: "/assets/img/dhwaj.jpeg" },
+      { position: "टोली सदस्य", name: "सुनीता गौबा", image: "/assets/img/dhwaj.jpeg" },
+      { position: "टोली सदस्य", name: "योगेश गेरा", image: "/assets/img/dhwaj.jpeg" }
+    ]
   },
-  {
-    "position": "महिला शक्ति टोली सदस्य",
-    "name": "मोनिका ढल",
-    "image": "/assets/img/dhwaj.jpeg"
+
+    {
+    toliName: "21 Block",
+    members: [
+      { position: "टोली प्रमुख", name: "जनार्दन झा", image: "/assets/img/dhwaj.jpeg" },
+      { position: "सह टोली प्रमुख", name: "दीपांशु", image: "/assets/img/dhwaj.jpeg" },
+      { position: "टोली सदस्य", name: "देव चन्दर झा", image: "/assets/img/dhwaj.jpeg" },
+      { position: "टोली सदस्य", name: "मनोज", image: "/assets/img/dhwaj.jpeg" },
+    ]
   },
+
+
+
   {
-    "position": "महिला शक्ति टोली सदस्य",
-    "name": "नीतू यादव",
-    "image": "/assets/img/dhwaj.jpeg"
+    toliName: "24 Block",
+    members: [
+      { position: "टोली प्रमुख", name: "महेश शर्मा", image: "/assets/img/dhwaj.jpeg" },
+      { position: "सह टोली प्रमुख", name: "सुभाष चंद्र लूथरा", image: "/assets/img/dhwaj.jpeg" }
+    ]
   },
-  {
-    "position": "महिला शक्ति टोली सदस्य",
-    "name": "रेनू आनंद",
-    "image": "/assets/img/dhwaj.jpeg"
+
+    {
+    toliName: "25 Block",
+    members: [
+      { position: "टोली प्रमुख", name: "बिट्टू दाल", image: "/assets/img/dhwaj.jpeg" },
+      { position: "सह टोली प्रमुख", name: "उमेश सूरी", image: "/assets/img/dhwaj.jpeg" },
+      { position: "टोली सदस्य", name: "मोनिका ढल", image: "/assets/img/dhwaj.jpeg" }
+    ]
   },
+
   {
-    "position": "महिला शक्ति टोली सदस्य",
-    "name": "शिवानी लांबा",
-    "image": "/assets/img/dhwaj.jpeg"
+    toliName: "26 Block",
+    members: [
+      { position: "टोली प्रमुख", name: "योगेश शर्मा", image: "/assets/img/dhwaj.jpeg" },
+      { position: "सह टोली प्रमुख", name: "बलबीर शर्मा", image: "/assets/img/dhwaj.jpeg" }
+    ]
   },
+
+
   {
-    "position": "महिला शक्ति टोली सदस्य",
-    "name": "सुनीता गौबा",
-    "image": "/assets/img/dhwaj.jpeg"
-  },
-  {
-    "position": "टोली सदस्य",
-    "name": "बलबीर शर्मा",
-    "image": "/assets/img/dhwaj.jpeg"
-  },
-  {
-    "position": "टोली सदस्य",
-    "name": "बिट्टू ढल",
-    "image": "/assets/img/dhwaj.jpeg"
-  },
-  {
-    "position": "टोली सदस्य",
-    "name": "दीपक आनंद",
-    "image": "/assets/img/dhwaj.jpeg"
-  },
-  {
-    "position": "टोली सदस्य",
-    "name": "डॉ मेहता",
-    "image": "/assets/img/dhwaj.jpeg"
-  },
-  {
-    "position": "टोली सदस्य",
-    "name": "जगदंबा",
-    "image": "/assets/img/dhwaj.jpeg"
-  },
-  {
-    "position": "टोली सदस्य",
-    "name": "महेश शर्मा",
-    "image": "/assets/img/dhwaj.jpeg"
-  },
-  {
-    "position": "टोली सदस्य",
-    "name": "मणि अनेजा",
-    "image": "/assets/img/dhwaj.jpeg"
-  },
-  {
-    "position": "टोली सदस्य",
-    "name": "राहुल सचदेवा",
-    "image": "/assets/img/dhwaj.jpeg"
-  },
-  {
-    "position": "टोली सदस्य",
-    "name": "श्री महेश",
-    "image": "/assets/img/dhwaj.jpeg"
-  },
-  {
-    "position": "टोली सदस्य",
-    "name": "संजय खन्ना",
-    "image": "/assets/img/dhwaj.jpeg"
-  },
-  {
-    "position": "टोली सदस्य",
-    "name": "संजीव गंधर्व",
-    "image": "/assets/img/dhwaj.jpeg"
-  },
-  {
-    "position": "टोली सदस्य",
-    "name": "सुभाष चंद्र लूथरा",
-    "image": "/assets/img/dhwaj.jpeg"
-  },
-  {
-    "position": "टोली सदस्य",
-    "name": "उमेश सूरी",
-    "image": "/assets/img/dhwaj.jpeg"
-  },
-  
-  {
-    "position": "टोली सदस्य",
-    "name": "रवि चन्द्र",
-    "image": "/assets/img/dhwaj.jpeg"
-  },
-  {
-    "position": "टोली सदस्य",
-    "name": "योगेश आनंद",
-    "image": "/assets/img/dhwaj.jpeg"
+    toliName: "महिला शक्ति",
+    members: [
+      { position: "महिला शक्ति टोली सदस्य", name: "अनुराधा", image: "/assets/img/dhwaj.jpeg" },
+      { position: "महिला शक्ति टोली सदस्य", name: "आशा", image: "/assets/img/dhwaj.jpeg" },
+      { position: "महिला शक्ति टोली सदस्य", name: "नीतू यादव", image: "/assets/img/dhwaj.jpeg" },
+      { position: "महिला शक्ति टोली सदस्य", name: "रेनू आनंद", image: "/assets/img/dhwaj.jpeg" },
+    ]
   }
-],        
-      },
-      {
-        toliName: "टोली 2",
-        members: [
-          // { position: "टोली प्रमुख", name: "मनोज", image: "/assets/img/dhwaj.jpeg" },
-          // { position: "सह टोली प्रमुख", name: "निखिल", image: "/assets/img/dhwaj.jpeg" },
-        ],
-      },
-    ],
+],
   },
   
   // // --- सावन भादो बस्ती ---
