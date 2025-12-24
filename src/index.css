@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Vibrant Saffron/Bhagwa color theme for RSS */
+    --background: 45 60% 98%;
+    --foreground: 20 20% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 20 20% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 20% 15%;
+
+    /* Vibrant Bhagwa Saffron Orange */
+    --primary: 22 100% 55%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 28 100% 65%;
+    --primary-dark: 18 100% 48%;
+    --primary-glow: 25 100% 70%;
+
+    /* Rich Secondary */
+    --secondary: 15 85% 45%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 40 45% 92%;
+    --muted-foreground: 25 15% 40%;
+
+    --accent: 35 95% 58%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 35 60% 90%;
+    --input: 35 60% 92%;
+    --ring: 22 100% 55%;
+
+    --radius: 0.75rem;
+
+    /* Dazzling Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(22 100% 55%) 0%, hsl(28 100% 65%) 50%, hsl(35 95% 58%) 100%);
+    --gradient-secondary: linear-gradient(180deg, hsl(15 85% 45%) 0%, hsl(22 100% 55%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(45 60% 98%) 0%, hsl(35 80% 94%) 50%, hsl(28 70% 90%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(35 40% 98%) 100%);
+    --gradient-radial: radial-gradient(circle at top, hsl(28 100% 65% / 0.15) 0%, transparent 60%);
+    
+    /* Striking Shadows with intense saffron glow */
+    --shadow-saffron: 0 20px 60px -15px hsl(22 100% 55% / 0.5);
+    --shadow-saffron-lg: 0 30px 80px -20px hsl(22 100% 55% / 0.6), 0 0 40px hsl(28 100% 65% / 0.3);
+    --shadow-card: 0 4px 20px hsl(25 40% 20% / 0.12), 0 0 0 1px hsl(35 60% 90%);
+    --shadow-glow: 0 0 30px hsl(28 100% 65% / 0.4), 0 0 60px hsl(22 100% 55% / 0.2);
+    
+    /* Animation */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .dark {
+    --background: 20 35% 8%;
+    --foreground: 45 50% 96%;
+
+    --card: 20 30% 12%;
+    --card-foreground: 45 50% 96%;
+
+    --popover: 20 30% 12%;
+    --popover-foreground: 45 50% 96%;
+
+    --primary: 22 100% 55%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 25 100% 70%;
+
+    --secondary: 15 70% 35%;
+    --secondary-foreground: 45 50% 96%;
+
+    --muted: 20 25% 18%;
+    --muted-foreground: 35 30% 70%;
+
+    --accent: 35 95% 58%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 45 50% 96%;
+
+    --border: 20 30% 22%;
+    --input: 20 30% 22%;
+    --ring: 22 100% 55%;
+    
+    --gradient-primary: linear-gradient(135deg, hsl(22 100% 45%) 0%, hsl(28 100% 55%) 50%, hsl(35 95% 48%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(20 35% 8%) 0%, hsl(20 40% 12%) 100%);
+    --shadow-saffron-lg: 0 30px 80px -20px hsl(22 100% 45% / 0.5), 0 0 40px hsl(28 100% 55% / 0.25);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-hindi;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-hindi;
+  }
+}
