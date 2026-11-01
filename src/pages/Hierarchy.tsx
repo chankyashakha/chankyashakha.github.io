@@ -9,7 +9,7 @@ const hierarchyData = [
     members: [
       {
         position: "शाखा कार्यवाह",
-        name: "श्री मुरलीधर जी",
+        name: "श्री उमेश जी",
         image: "/assets/img/dhwaj.jpeg",
       },
     ],
@@ -20,7 +20,7 @@ const hierarchyData = [
     members: [
       {
         position: "शाखा मुख्य शिक्षक",
-        name: "श्री उमेश जी",
+        name: "श्री राकेश जी",
         image: "/assets/img/dhwaj.jpeg",
       },
     ],
