@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>चाणक्य शाखा | Chankyashakha</title>
+    <script>
+        // Redirect to root with hash
+        const pathname = window.location.pathname;
+        if (!pathname.includes('.')) {
+            // Extract the path and redirect to root with hash
+            const segments = pathname.split('/').filter(s => s && s !== 'chankyashakha.github.io');
+            if (segments.length > 0) {
+                window.location.replace('/#/' + segments.join('/'));
+            }
+        }
+    </script>
+</head>
+<body>
+    <p>Redirecting...</p>
+</body>
+</html>
